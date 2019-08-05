@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div>
+<h1> {{ post.title }} - {{ post.author }}</h1>
+    <small> {{ post.date_posted }}</small>
+<p> {{ post.content }}</p>
+</div>
+
+<div>
+    <h4>
+        Comments({{ post.comment_set.count }})
+    </h4>
+    {% for comment in post.comment_set.all %}
+    <p>{{ comment.content }} - <small> {{ comment.author }} </small>
+    {% endfor %}
+</div>
+<div>
+    <a href="{% url 'blog-post-comment' id=post.id %}">Comment</a>
+</div>
+
+{% endblock %}
