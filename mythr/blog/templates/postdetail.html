@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-<h1> {{ post.title }} - {{ post.author }}</h1>
+<h1> {{ post.title }} - {{ post.author.name }}</h1>
     <small> {{ post.date_posted }}</small>
 <p> {{ post.content }}</p>
 </div>
@@ -12,7 +12,7 @@
         Comments({{ post.comment_set.count }})
     </h4>
     {% for comment in post.comment_set.all %}
-    <p>{{ comment.content }} - <small> {{ comment.author }} </small>
+    <p>{{ comment.content }} - <small> {{ comment.author.name }} </small>
     {% endfor %}
 </div>
 <div>

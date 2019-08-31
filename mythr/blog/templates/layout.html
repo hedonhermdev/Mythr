@@ -1,13 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <meta charset="UTF-8">
     {% if title %}
-    <title>Mythr- {{ title }}</title>
+        <title>Mythr- {{ title }}</title>
     {% endif %}
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'blog-home' %}">Home</a></li>
+            <li><a href="#">Your Feed</a></li>
+            <li><a href="#">Your Posts</a></li>
+            <li><a href="{% url 'blog-post-new' %}"> New Post </a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if request.user.is_authenticated %}
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span>{{ request.user.username }}</a></li>
+                <li><a href="{% url 'blog-accounts-logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'blog-accounts-login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="{% url 'blog-accounts-register' %}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% block content %}
+{% endblock %}
+
 </body>
 </html>
