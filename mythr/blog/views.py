@@ -66,6 +66,8 @@ def register_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('blog-home')
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
@@ -89,7 +91,7 @@ def logout_view(request):
 def user_follow_view(request, id):
     to_follow = get_object_or_404(User, id=id)
     follower = request.user
-    if not follower.profile in to_follow.profile.followers.all():
+    if follower.profile not in to_follow.profile.followers.all():
         follower.profile.follows.add(follower.profile)
     return redirect('blog-accounts-profile', id=id)
 
@@ -102,12 +104,22 @@ def user_unfollow_view(request, id):
         follower.profile.follows.remove(to_unfollow.profile)
     return redirect('blog-accounts-profile', id=id)
 
+
 #       Posts and comments related views.
 
 @login_required(login_url='/blog/accounts/login/')
 def post_detail(request, id):
     post = get_object_or_404(Post, id=id)
-    return render(request, 'postdetail.html', context={'post': post})
+    context = {
+        'post': post,
+        'title': post.title,
+        'content': post.content,
+        'author': post.author,
+        'date_posted': post.date_posted,
+        'comments': post.comment_set.all(),
+        'num_comments': post.comment_set.count()
+    }
+    return render(request, 'postdetail.html', context=context)
 
 
 @login_required(login_url='/blog/accounts/login/')
@@ -119,7 +131,7 @@ def new_post(request):
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
             post = Post.objects.create(title=title, content=content, author=user)
-        return redirect('blog-post-detail', id=post.id)
+            return redirect('blog-post-detail', id=post.id)
     else:
         form = NewPostForm()
     return render(request, 'newpost.html', {'form': form})
@@ -141,14 +153,14 @@ def new_comment(request, id):
 
 
 def post_delete_view(request, id):
-    post = get_object_or_404(id=id)
+    post = get_object_or_404(Post, id=id)
     if request.user == post.author:
         if request.method == 'POST':
             post.delete()
             return redirect('blog-home')
-        return render(request, 'postdelete.html', {'post': post})
     else:
         return redirect('blog-home')
+    return render(request, 'postdelete.html', {'post': post})
 
 
 #       Homepage and feedpage.
@@ -176,5 +188,3 @@ def feed_view(request):
         if post.author in following:
             posts.append(post)
     return render(request, 'feed.html', {'title': 'Your Feed', 'posts': posts})
-
-

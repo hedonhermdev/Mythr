@@ -1,11 +1,12 @@
 from django.urls import path
+from django.views.generic import RedirectView
 from . import views
 
 
-
 urlpatterns = [
-    path('', views.home, name='blog-home'),
-    path('', views.feed_view, name='blog-feed')
+    path('', RedirectView.as_view(url='home/')),
+    path('home/', views.home, name='blog-home'),
+    path('feed/', views.feed_view, name='blog-feed')
 ]
 
 urlpatterns += [
@@ -18,7 +19,8 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('post/new/', views.new_post, name='blog-post-new'),
     path('post/<int:id>/', views.post_detail, name='blog-post-detail'),
     path('post/<int:id>/comment/', views.new_comment, name='blog-post-comment'),
-    path('post/new/', views.new_post, name='blog-post-new')
+    path('post/<int:id>/delete/', views.post_delete_view, name='blog-post-delete')
 ]

@@ -2,17 +2,23 @@
 
 {% block content %}
 <div>
-<h1> {{ post.title }} - {{ post.author.name }}</h1>
-    <small> {{ post.date_posted }}</small>
-<p> {{ post.content }}</p>
+<h1> {{ title }} - {{ author.username }}</h1>
+    <small> {{ date_posted }}</small>
+<p> {{ content }}</p>
+    {% if request.user == author %}
+    <div>
+        <a href="#">Edit</a>
+        <a href="{% url 'blog-post-delete' id=post.id %}">Delete</a>
+    </div>
+    {% endif %}
 </div>
 
 <div>
     <h4>
-        Comments({{ post.comment_set.count }})
+        Comments({{ num_comments }})
     </h4>
-    {% for comment in post.comment_set.all %}
-    <p>{{ comment.content }} - <small> {{ comment.author.profile.first_name }} </small>
+    {% for comment in comments %}
+    <p>{{ comment.content }} - <small> {{ comment.author.username }} </small>
     {% endfor %}
 </div>
 <div>

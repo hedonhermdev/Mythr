@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>
-        Mythr - A MicroBlog
+        Your Feed
     </h1>
     <div>
-        <h3>
-            Posts
-        </h3>
+        <h4>
+            Posts from people you follow
+        </h4>
         {% for post in posts %}
         <div>
             <a href="/blog/post/{{ post.id }}"><h7>

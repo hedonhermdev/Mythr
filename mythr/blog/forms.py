@@ -2,7 +2,8 @@ from django import forms
 
 from .validators import password_match_validator
 
-#TODO: Add new form validators.
+
+# TODO: Add new form validators.
 
 class UserRegistrationForm(forms.Form):
     first_name = forms.CharField()
@@ -21,15 +22,28 @@ class UserRegistrationForm(forms.Form):
 
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(min_length=8, widget=forms.PasswordInput())
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    password = forms.CharField(min_length=8, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
 
 class NewPostForm(forms.Form):
-    title = forms.CharField(required=True)
-    content = forms.CharField(widget=forms.Textarea, required=True)
+    title = forms.CharField(required=True,
+                            max_length=140,
+                            widget=forms.TextInput(
+                                attrs={'class': 'form-control',
+                                       'placeholder': 'Enter a title. '}))
+
+    content = forms.CharField(required=True,
+                              min_length=50,
+                              max_length=10000,
+                              widget=forms.Textarea(
+                                    attrs={'class': 'form-control',
+                                           'placeholder': 'Express your views. MythrConnect is a safe space :)'}))
 
 
 class CommentForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea, required=True)
-
+    content = forms.CharField(required=True,
+                              max_length=1000,
+                              widget=forms.Textarea(
+                                    attrs={'class': 'form-control',
+                                           'placeholder': 'Say something nice :)'}))
