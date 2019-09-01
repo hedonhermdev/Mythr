@@ -8,6 +8,35 @@ from .forms import UserRegistrationForm, UserLoginForm, CommentForm, NewPostForm
 from .models import Post, Comment
 
 
+#       User and profile related views.
+
+@login_required()
+def user_profile_view(request, id):
+    user = get_object_or_404(User, id=id)
+
+    # Unfollow and follow users.
+    follow_link = f'/blog/accounts/user/{user.id}/follow/'
+    unfollow_link = f'blog/accounts/user/{user.id}/unfollow/'
+
+    # Get the users details.
+    context = {
+        'username': user.username,
+        'name': f'{user.profile.first_name} {user.profile.last_name}',
+        'birthdate': f'{user.profile.birthdate.strftime("%d-%m-%y")}',
+        'num_followers': len(user.profile.followers.all()),
+        'num_following': len(user.profile.follows.all()),
+        'follow_link': follow_link,
+        'unfollow_link': unfollow_link
+    }
+    # Get the users posts.
+    try:
+        posts = user.posts.all()
+    except Post.DoesNotExist:
+        posts = []
+    context.update({'posts': posts})
+    return render(request, 'profiledetail.html', context=context)
+
+
 def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -28,6 +57,8 @@ def register_view(request):
             # Login
             user = authenticate(username=username, password=password)
             login(request, user)
+            # Every user follows themself :)
+            user.profile.follows.add(user.profile)
             return redirect('blog-home')
     else:
         form = UserRegistrationForm()
@@ -55,15 +86,23 @@ def logout_view(request):
 
 
 @login_required(login_url='/blog/accounts/login/')
-def home(request):
-    title = 'Home Page'
-    posts = list(Post.objects.all())
-    context = {
-        'title': title,
-        'posts': posts
-    }
-    return render(request, 'home.html', context=context)
+def user_follow_view(request, id):
+    to_follow = get_object_or_404(User, id=id)
+    follower = request.user
+    if not follower.profile in to_follow.profile.followers.all():
+        follower.profile.follows.add(follower.profile)
+    return redirect('blog-accounts-profile', id=id)
 
+
+@login_required(login_url='/blog/accounts/login/')
+def user_unfollow_view(request, id):
+    to_unfollow = get_object_or_404(User, id=id)
+    follower = request.user
+    if follower.profile in to_unfollow.profile.followers.all():
+        follower.profile.follows.remove(to_unfollow.profile)
+    return redirect('blog-accounts-profile', id=id)
+
+#       Posts and comments related views.
 
 @login_required(login_url='/blog/accounts/login/')
 def post_detail(request, id):
@@ -85,6 +124,7 @@ def new_post(request):
         form = NewPostForm()
     return render(request, 'newpost.html', {'form': form})
 
+
 @login_required(login_url='/blog/accounts/login/')
 def new_comment(request, id):
     user = request.user
@@ -92,7 +132,7 @@ def new_comment(request, id):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = Comment(content=form.cleaned_data['content'], author=form.cleaned_data['author'], post=post)
+            comment = Comment(content=form.cleaned_data['content'], author=user, post=post)
             comment.save()
             return redirect('blog-post-detail', id=post.id)
     else:
@@ -109,3 +149,32 @@ def post_delete_view(request, id):
         return render(request, 'postdelete.html', {'post': post})
     else:
         return redirect('blog-home')
+
+
+#       Homepage and feedpage.
+
+@login_required(login_url='/blog/accounts/login/')
+def home(request):
+    user = request.user
+    title = 'Home Page'
+    posts = list(Post.objects.all())
+    context = {
+        'user': user,
+        'title': title,
+        'posts': posts
+    }
+    return render(request, 'home.html', context=context)
+
+
+@login_required(login_url='/blog/accounts/login/')
+def feed_view(request):
+    user = request.user
+    following = user.posts.all()
+    posts = []
+    # TODO: Turn this into one line list comprehension.
+    for post in Post.objects.set():
+        if post.author in following:
+            posts.append(post)
+    return render(request, 'feed.html', {'title': 'Your Feed', 'posts': posts})
+
+

@@ -4,7 +4,6 @@ import re
 import datetime
 
 
-
 def password_match_validator(password1, password2):
     if password1 != password2:
         raise ValidationError(

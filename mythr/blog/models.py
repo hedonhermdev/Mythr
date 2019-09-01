@@ -12,6 +12,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birthdate = models.DateField(null=True, )
+    follows = models.ManyToManyField('self', symmetrical=False, related_name='followers')
 
     def __str__(self):
         return self.user.username
@@ -33,20 +34,19 @@ def update_user_profile(sender, instance, **kwargs):
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=140, null=False)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"<Post('{self.title}, {self.author}')>"
+        return f"Post('{self.title}, {self.author}')"
 
 
 class Comment(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     date_published = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"Comment('{self.content}', '{self.post}', '{self.author}')"
-

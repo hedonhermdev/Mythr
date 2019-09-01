@@ -18,8 +18,8 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="{% url 'blog-home' %}">Home</a></li>
-            <li><a href="#">Your Feed</a></li>
-            <li><a href="#">Your Posts</a></li>
+            <li><a href="{% url 'blog-feed' %}">Your Feed</a></li>
+            <li><a href="{%  url 'blog-accounts-profile' id=request.user.id %}">Your Profile</a></li>
             <li><a href="{% url 'blog-post-new' %}"> New Post </a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

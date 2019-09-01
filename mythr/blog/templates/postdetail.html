@@ -12,7 +12,7 @@
         Comments({{ post.comment_set.count }})
     </h4>
     {% for comment in post.comment_set.all %}
-    <p>{{ comment.content }} - <small> {{ comment.author.name }} </small>
+    <p>{{ comment.content }} - <small> {{ comment.author.profile.first_name }} </small>
     {% endfor %}
 </div>
 <div>
