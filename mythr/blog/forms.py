@@ -2,6 +2,7 @@ from django import forms
 
 from .validators import password_match_validator
 
+#TODO: Add new form validators.
 
 class UserRegistrationForm(forms.Form):
     first_name = forms.CharField()
@@ -30,5 +31,5 @@ class NewPostForm(forms.Form):
 
 
 class CommentForm(forms.Form):
-    content  = forms.CharField(widget=forms.Textarea, required=True)
+    content = forms.CharField(widget=forms.Textarea, required=True)
 
