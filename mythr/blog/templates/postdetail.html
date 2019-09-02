@@ -7,7 +7,11 @@
 <p> {{ content }}</p>
     {% if request.user == author %}
     <div>
+<<<<<<< HEAD
         <a href="{% url 'blog-post-edit' id=post.id %}">Edit</a>
+=======
+        <a href="#">Edit</a>
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
         <a href="{% url 'blog-post-delete' id=post.id %}">Delete</a>
     </div>
     {% endif %}

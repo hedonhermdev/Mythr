@@ -14,16 +14,31 @@ from .models import Post, Comment
 def user_profile_view(request, id):
     user = get_object_or_404(User, id=id)
 
+<<<<<<< HEAD
     # Get the users details.
     context = {
         'user': user,
+=======
+    # Unfollow and follow users.
+    follow_link = f'/blog/accounts/user/{user.id}/follow/'
+    unfollow_link = f'blog/accounts/user/{user.id}/unfollow/'
+
+    # Get the users details.
+    context = {
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
         'username': user.username,
         'name': f'{user.profile.first_name} {user.profile.last_name}',
         'birthdate': f'{user.profile.birthdate.strftime("%d-%m-%y")}',
         'num_followers': len(user.profile.followers.all()),
         'num_following': len(user.profile.follows.all()),
+<<<<<<< HEAD
     }
 
+=======
+        'follow_link': follow_link,
+        'unfollow_link': unfollow_link
+    }
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     # Get the users posts.
     try:
         posts = user.posts.all()
@@ -34,8 +49,11 @@ def user_profile_view(request, id):
 
 
 def register_view(request):
+<<<<<<< HEAD
     if request.user.is_authenticated():
         return redirect(request, 'blog-home')
+=======
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -87,28 +105,46 @@ def logout_view(request):
 
 @login_required(login_url='/blog/accounts/login/')
 def user_follow_view(request, id):
+<<<<<<< HEAD
     user_to_follow = get_object_or_404(User, id=id)
     follower = request.user
     if follower.profile not in user_to_follow.profile.followers.all():
         user_to_follow.profile.followers.add(follower.profile)
         user_to_follow.save()
+=======
+    to_follow = get_object_or_404(User, id=id)
+    follower = request.user
+    if follower.profile not in to_follow.profile.followers.all():
+        follower.profile.follows.add(follower.profile)
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     return redirect('blog-accounts-profile', id=id)
 
 
 @login_required(login_url='/blog/accounts/login/')
 def user_unfollow_view(request, id):
+<<<<<<< HEAD
     user_to_unfollow = get_object_or_404(User, id=id)
     unfollower = request.user
     if unfollower.profile in user_to_unfollow.profile.followers.all():
         user_to_unfollow.profile.followers.remove(unfollower.profile)
         user_to_unfollow.save()
+=======
+    to_unfollow = get_object_or_404(User, id=id)
+    follower = request.user
+    if follower.profile in to_unfollow.profile.followers.all():
+        follower.profile.follows.remove(to_unfollow.profile)
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     return redirect('blog-accounts-profile', id=id)
 
 
 #       Posts and comments related views.
 
 @login_required(login_url='/blog/accounts/login/')
+<<<<<<< HEAD
 def post_detail_view(request, id):
+=======
+def post_detail(request, id):
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     post = get_object_or_404(Post, id=id)
     context = {
         'post': post,
@@ -123,7 +159,11 @@ def post_detail_view(request, id):
 
 
 @login_required(login_url='/blog/accounts/login/')
+<<<<<<< HEAD
 def new_post_view(request):
+=======
+def new_post(request):
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     user = request.user
     if request.method == 'POST':
         form = NewPostForm(request.POST)
@@ -138,7 +178,11 @@ def new_post_view(request):
 
 
 @login_required(login_url='/blog/accounts/login/')
+<<<<<<< HEAD
 def new_comment_view(request, id):
+=======
+def new_comment(request, id):
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
     user = request.user
     post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
@@ -152,6 +196,7 @@ def new_comment_view(request, id):
     return render(request, 'newcomment.html', context={'form': form})
 
 
+<<<<<<< HEAD
 def post_edit_view(request, id):
     post = get_object_or_404(Post, id=id)
 
@@ -170,6 +215,8 @@ def post_edit_view(request, id):
         return render(request, 'postedit.html', context={'title': 'Edit Post', 'form': form})
 
 
+=======
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
 def post_delete_view(request, id):
     post = get_object_or_404(Post, id=id)
     if request.user == post.author:
@@ -202,7 +249,11 @@ def feed_view(request):
     following = user.posts.all()
     posts = []
     # TODO: Turn this into one line list comprehension.
+<<<<<<< HEAD
     for post in Post.objects.all():
+=======
+    for post in Post.objects.set():
+>>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
         if post.author in following:
             posts.append(post)
     return render(request, 'feed.html', {'title': 'Your Feed', 'posts': posts})
