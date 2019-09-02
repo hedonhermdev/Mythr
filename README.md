@@ -9,7 +9,7 @@
   - [x] Associate users with a profile. Let users modify their profile data.
   - [x] Allow users to make their own posts and also comment on others' posts (no need to implement commenting on comments).
   - [x] Allow users to follow each other (hint: you'll need to use many-to-many fields). When you follow other users, make it so that the relavent posts can easily be accessed somewhere (sort of like a news feed).
-  - [ ] Make it possible to edit and delete posts. But think about this issue: what if someone posts something offensive and then edits or deletes it.... how would you prevent cyber-crime and cyber-bullying caused by this? (this is an example of where your creativity as a developer will be needed)
+  - [x] Make it possible to edit and delete posts. But think about this issue: what if someone posts something offensive and then edits or deletes it.... how would you prevent cyber-crime and cyber-bullying caused by this? (this is an example of where your creativity as a developer will be needed)
 
 Phase 2 features: 
   - [ ] Up until now, you've only been using an Sqlite3 database. Time to upgrade. Change your database backend to MySQL (since it's part of the DVM's tech stack).
@@ -17,4 +17,11 @@ Phase 2 features:
   - [ ] Without using the student pack that you got, make a seperate account on SendGrid. Then using SendGrid's API, extend the "following other people" feature so that you can choose to recieve mail based notificiations whenever that person makes a new post (so now there are two ways to follow a person.)
   - [ ] Extend the login system. Make it so that a person can also log in with Google. Use Google's API to provide OAUTH 2.0 based log-in.
   - [ ] Create a feature where staff and site admins can generate a report containing all of the basic profile data of each person registered on the site. The profile should be in the form of an excel sheet and we suggest using Openpyxl to get this done in python.
+  
+# Scope for Improvement
+  - [ ] UI is REALLY trashy. Improve it.
+  - [ ] Commenting form should be in the same page as post detail.
+  - [ ] Improve forms using custom (& reusable) form widgets.
+  - [ ] Add a search user functionality.
+  - [ ] Add liking posts feature.
   
