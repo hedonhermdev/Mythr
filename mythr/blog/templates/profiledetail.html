@@ -15,10 +15,10 @@
         <li>
             Followers: {{ num_followers }}
         </li>
-        {% if not request.user.profile in user.profile.followers.all %}
-            <li><a href="{{ follow_link }}">Follow</a> </li>
+        {% if request.user.profile in user.profile.followers.all %}
+            <li><a href="{% url 'blog-accounts-profile-unfollow' id=user.id %}">Unfollow</a> </li>
         {% else %}
-            <li><a href="#">Unfollow</a></li>
+            <li><a href="{% url 'blog-accounts-profile-follow' id=user.id %}">Follow</a></li>
         {% endif %}
     </ul>
 </div>
