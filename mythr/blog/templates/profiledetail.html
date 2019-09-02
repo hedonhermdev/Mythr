@@ -16,6 +16,7 @@
             Followers: {{ num_followers }}
         </li>
 <<<<<<< HEAD
+<<<<<<< HEAD
         {% if request.user.profile in user.profile.followers.all %}
             <li><a href="{% url 'blog-accounts-profile-unfollow' id=user.id %}">Unfollow</a> </li>
         {% else %}
@@ -26,6 +27,12 @@
         {% else %}
             <li><a href="#">Unfollow</a></li>
 >>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
+=======
+        {% if request.user.profile in user.profile.followers.all %}
+            <li><a href="{% url 'blog-accounts-profile-unfollow' id=user.id %}">Unfollow</a> </li>
+        {% else %}
+            <li><a href="{% url 'blog-accounts-profile-follow' id=user.id %}">Follow</a></li>
+>>>>>>> 3747efc48c6393184af8300fa17c672b7f4f83f7
         {% endif %}
     </ul>
 </div>

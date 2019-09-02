@@ -8,10 +8,14 @@
     {% if request.user == author %}
     <div>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <a href="{% url 'blog-post-edit' id=post.id %}">Edit</a>
 =======
         <a href="#">Edit</a>
 >>>>>>> 8b27c012e480a0f502e3054dbf6129d70bea0019
+=======
+        <a href="{% url 'blog-post-edit' id=post.id %}">Edit</a>
+>>>>>>> 3747efc48c6393184af8300fa17c672b7f4f83f7
         <a href="{% url 'blog-post-delete' id=post.id %}">Delete</a>
     </div>
     {% endif %}
